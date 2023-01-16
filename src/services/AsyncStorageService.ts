@@ -18,21 +18,25 @@ export const useUpdateFavorites = ({removeAll}: {removeAll?: boolean}) => {
   return useMutation(
     StorageKeys.Favorites,
     async (newFavorite: IFavorite | null) => {
-      const result: string | null = await AsyncStorage.getItem(
-        StorageKeys.Favorites,
-      );
+      try {
+        const result: string | null = await AsyncStorage.getItem(
+          StorageKeys.Favorites,
+        );
 
-      const currentData = result ? JSON.parse(result) : [];
-      const newData = removeAll
-        ? []
-        : newFavorite && getUpdatedFavorites(currentData, newFavorite);
+        const currentData = result ? JSON.parse(result) : [];
+        const newData = removeAll
+          ? []
+          : newFavorite && getUpdatedFavorites(currentData, newFavorite);
 
-      await AsyncStorage.setItem(
-        StorageKeys.Favorites,
-        JSON.stringify(newData),
-      );
+        await AsyncStorage.setItem(
+          StorageKeys.Favorites,
+          JSON.stringify(newData),
+        );
 
-      return newData;
+        return newData;
+      } catch (error) {
+        console.log(error);
+      }
     },
     {
       onSuccess: () => queryClient.invalidateQueries(StorageKeys.Favorites),

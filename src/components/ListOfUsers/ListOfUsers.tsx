@@ -1,5 +1,6 @@
 import {useMemo, useRef, useState} from 'react';
 import {
+  ActivityIndicator,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -29,11 +30,7 @@ const ListOfUsers = () => {
   const [page, setPage] = useState(1);
   const [searchedNames, setSearchedNames] = useState<IEdge[] | null>(null);
 
-  const {
-    data: userList,
-    loading: userListIsLoading,
-    refetch,
-  } = useGetUsers(initialVariables);
+  const {data: userList, refetch} = useGetUsers(initialVariables);
   const {data: allUsers, loading} = useGetAllUsers();
 
   const setFocusOnInput = () => {
@@ -92,8 +89,8 @@ const ListOfUsers = () => {
     return searchedNames ? searchedNames : userList?.allPeople.edges;
   }, [searchedNames, userList?.allPeople.edges]);
 
-  if (userListIsLoading || loading) {
-    return <></>;
+  if (loading) {
+    return <ActivityIndicator color={'blue'} />;
   }
 
   return (
