@@ -1,13 +1,9 @@
 import {useQuery} from '@apollo/client';
 import {GetAllUsers} from '../../graphql/queries/users';
-import {IGetAllUsers, IGetUserVariables} from '../../types/user';
+import {IGetAllUsers} from '../../types/user';
 
-export const useGetUsers = (variables: IGetUserVariables) => {
+export const useGetAllUsers = () => {
   const {data, loading, error, refetch} = useQuery<IGetAllUsers>(GetAllUsers, {
-    context: {
-      urlKey: 'https://swapi-graphql.netlify.app/.netlify/functions/index',
-    },
-    variables: variables,
     fetchPolicy: 'network-only',
   });
 

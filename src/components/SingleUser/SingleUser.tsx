@@ -1,5 +1,5 @@
-import React from 'react';
-import {Text, View} from 'react-native';
+import React, {useMemo} from 'react';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {HeartIcon} from '../../assets/icons/HeartIcon';
 
 import {
@@ -9,14 +9,24 @@ import {
 } from '../../services/AsyncStorageService';
 import {ISingleUser} from '../../types/user';
 import styles from './styles';
+import {useNavigation} from '@react-navigation/native';
+import {NavigationProps, SCREENS} from '../../types/navigation';
 
 interface IProps {
   isLastChild?: boolean;
   user?: ISingleUser;
   isInfo?: boolean;
+  onPress?: () => void;
+  isSorted?: boolean;
 }
 
-const SingleUser = ({isLastChild, user, isInfo = false}: IProps) => {
+const SingleUser = ({
+  isLastChild,
+  user,
+  isInfo = false,
+  onPress,
+  isSorted,
+}: IProps) => {
   const params = isInfo
     ? {
         name: 'Name',
@@ -39,8 +49,32 @@ const SingleUser = ({isLastChild, user, isInfo = false}: IProps) => {
     user && updateFavorites.mutate({id: user?.id, gender: user?.gender});
   };
   const isActive = !!favorites?.find(favorite => favorite?.id === user?.id);
+  const {navigate} = useNavigation<NavigationProps>();
+
+  const NameComponent = useMemo(() => {
+    return isInfo
+      ? () => (
+          <TouchableOpacity
+            onPress={onPress}
+            style={[{width: '23%'}, isInfo && styles.twoSideBorders]}>
+            <Text style={[styles.alignCenter, isSorted && styles.blueColor]}>
+              {params.name}
+            </Text>
+          </TouchableOpacity>
+        )
+      : () => (
+          <View style={[{width: '23%'}, isInfo && styles.twoSideBorders]}>
+            <Text style={styles.alignCenter}>{params.name}</Text>
+          </View>
+        );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isInfo, isSorted]);
   return (
-    <View
+    <TouchableOpacity
+      disabled={isInfo}
+      onLongPress={() =>
+        user && navigate(SCREENS.SINGLE_USER, {userInfo: user})
+      }
       style={[
         styles.container,
         isLastChild && styles.lastChild,
@@ -55,9 +89,7 @@ const SingleUser = ({isLastChild, user, isInfo = false}: IProps) => {
           />
         </View>
       </View>
-      <View style={[{width: '23%'}, isInfo && styles.twoSideBorders]}>
-        <Text style={styles.alignCenter}>{params.name}</Text>
-      </View>
+      <NameComponent />
       <View style={[{width: '15%'}, isInfo && styles.borders]}>
         <Text style={styles.alignCenter}>{params.birth_year}</Text>
       </View>
@@ -70,7 +102,7 @@ const SingleUser = ({isLastChild, user, isInfo = false}: IProps) => {
       <View style={{width: '18%'}}>
         <Text style={styles.alignCenter}>{params.species}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
