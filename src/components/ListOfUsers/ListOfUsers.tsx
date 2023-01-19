@@ -14,7 +14,7 @@ import {useGetUsers} from '../../hooks/useGetUsers/useGetUsers';
 import {NextIcon} from '../../assets/icons/NextIcon';
 import {PreviousIcon} from '../../assets/icons/PreviousIcon';
 
-import {useGetAllUsers} from '../../hooks/useGetAllUsers copy/useGetAllUsers';
+import {useGetAllUsers} from '../../hooks/useGetAllUsers/useGetAllUsers';
 import {IEdge} from '../../types/user';
 import {styles} from './styles';
 
@@ -29,6 +29,7 @@ const ListOfUsers = () => {
   const refInput = useRef<TextInput>(null);
   const [page, setPage] = useState(1);
   const [searchedNames, setSearchedNames] = useState<IEdge[] | null>(null);
+  const [isSorted, setIsSorted] = useState(false);
 
   const {data: userList, refetch} = useGetUsers(initialVariables);
   const {data: allUsers, loading} = useGetAllUsers();
@@ -86,8 +87,17 @@ const ListOfUsers = () => {
   };
 
   const currentListOfUsers = useMemo(() => {
-    return searchedNames ? searchedNames : userList?.allPeople.edges;
-  }, [searchedNames, userList?.allPeople.edges]);
+    const currentList = searchedNames
+      ? searchedNames
+      : userList?.allPeople.edges;
+
+    return isSorted
+      ? currentList &&
+          [...currentList].sort((a, b) =>
+            a.node.name.localeCompare(b.node.name),
+          )
+      : currentList;
+  }, [searchedNames, userList?.allPeople.edges, isSorted]);
 
   if (loading) {
     return <ActivityIndicator color={'blue'} />;
@@ -114,7 +124,13 @@ const ListOfUsers = () => {
         </View>
 
         <View style={styles.userListWrapper}>
-          <SingleUser isInfo />
+          <SingleUser
+            isInfo
+            isSorted={isSorted}
+            onPress={() => {
+              setIsSorted(prev => !prev);
+            }}
+          />
           {currentListOfUsers &&
             currentListOfUsers.map((user, index) => (
               <SingleUser

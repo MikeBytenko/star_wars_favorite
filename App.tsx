@@ -9,22 +9,25 @@
  */
 
 import React from 'react';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import {QueryClient, QueryClientProvider} from 'react-query';
 
 import Apollo from './src/containers/Core/Apollo/Apollo';
 
-import MainScreen from './src/screens/mainScreen';
+import Navigation from './src/containers/Core/navigation/Navigation';
 
 const App = () => {
   const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Apollo>
-        <MainScreen />
-      </Apollo>
-    </QueryClientProvider>
+    <SafeAreaProvider>
+      <QueryClientProvider client={queryClient}>
+        <Apollo>
+          <Navigation />
+        </Apollo>
+      </QueryClientProvider>
+    </SafeAreaProvider>
   );
 };
 
