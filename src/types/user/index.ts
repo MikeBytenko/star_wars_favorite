@@ -7,11 +7,18 @@ export interface ISingleUser {
   gender: string;
   homeworld: {
     name: string;
+    ['__typename']: string;
   };
   id: string;
   species: {
     name: string;
+    ['__typename']: string;
   };
+  height: number;
+  hairColor: string;
+  mass: number;
+  skinColor: string;
+  eyeColor: string;
   name: string;
 }
 

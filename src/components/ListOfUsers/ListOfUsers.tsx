@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {SearchIcon} from '../../assets/icons/SearchIcon';
 import SingleUser from '../SingleUser';
-import {useGetUsers} from '../../hooks/useGetUsers/useGetUsers';
+import {useGetUsersWithFilter} from '../../hooks/useGetUsersWithFilter/useGetUsersWithFilter';
 import {NextIcon} from '../../assets/icons/NextIcon';
 import {PreviousIcon} from '../../assets/icons/PreviousIcon';
 
@@ -31,7 +31,7 @@ const ListOfUsers = () => {
   const [searchedNames, setSearchedNames] = useState<IEdge[] | null>(null);
   const [isSorted, setIsSorted] = useState(false);
 
-  const {data: userList, refetch} = useGetUsers(initialVariables);
+  const {data: userList, refetch} = useGetUsersWithFilter(initialVariables);
   const {data: allUsers, loading} = useGetAllUsers();
 
   const setFocusOnInput = () => {

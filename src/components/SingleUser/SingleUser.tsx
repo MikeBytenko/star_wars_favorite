@@ -73,7 +73,7 @@ const SingleUser = ({
     <TouchableOpacity
       disabled={isInfo}
       onLongPress={() =>
-        navigate(SCREENS.SINGLE_USER, {userInfo: {} as unknown as ISingleUser})
+        user && navigate(SCREENS.SINGLE_USER, {userInfo: user})
       }
       style={[
         styles.container,

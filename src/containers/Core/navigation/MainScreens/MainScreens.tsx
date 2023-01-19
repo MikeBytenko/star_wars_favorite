@@ -2,6 +2,9 @@ import {
   createStackNavigator,
   StackNavigationOptions,
 } from '@react-navigation/stack';
+import {Linking} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {HeaderIcon} from '../../../../assets/icons/HeaderIcon';
 import {SCREENS} from '../../../../types/navigation';
 import {mainScreens} from '../screens';
 
@@ -15,8 +18,40 @@ const MainScreens = () => (
     {mainScreens.map(screen => (
       <Stack.Screen
         key={screen.name}
-        name={screen.name.split(':')[1]}
+        name={screen.name}
         component={screen.component}
+        options={
+          screen.headerShown
+            ? ({route}: {route: any}) => ({
+                headerShown: true,
+                headerRight() {
+                  const URL = 'https://www.incode-group.com/';
+
+                  const handlePress = async () => {
+                    try {
+                      const supported = await Linking.canOpenURL(URL);
+
+                      if (supported) {
+                        await Linking.openURL(URL);
+                      }
+                    } catch (e) {
+                      console.log(e);
+                    }
+                  };
+
+                  return (
+                    <TouchableOpacity onPress={handlePress}>
+                      <HeaderIcon />
+                    </TouchableOpacity>
+                  );
+                },
+                headerTitle: route?.params?.userInfo?.name,
+                headerBackTitle: 'Back',
+                headerBackTitleVisible: true,
+                headerLeftContainerStyle: {borderColor: 'red'},
+              })
+            : undefined
+        }
       />
     ))}
   </Stack.Navigator>

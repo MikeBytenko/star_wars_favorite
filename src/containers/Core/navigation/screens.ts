@@ -10,6 +10,7 @@ const mainScreens = [
   {
     name: SCREENS.SINGLE_USER,
     component: UserInfo,
+    headerShown: true,
   },
 ];
 

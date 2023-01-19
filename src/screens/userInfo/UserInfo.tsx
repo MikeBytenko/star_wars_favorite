@@ -1,23 +1,43 @@
+import {RouteProp, useRoute} from '@react-navigation/native';
 import React from 'react';
-import {Text} from 'react-native-svg';
-import {useNavigation} from '@react-navigation/native';
-import {NavigationProps} from '../../types/navigation';
-import { SafeAreaView, View } from 'react-native';
-import Header from '../../components/Header';
-import Statistic from '../../components/Statistic/Statistic';
-import ListOfUsers from '../../components/ListOfUsers';
+import {SafeAreaView, Text, View} from 'react-native';
+import {RootStackParamsList, SCREENS} from '../../types/navigation';
+import {styles} from './styles';
 
 export const UserInfo = () => {
-  const {goBack} = useNavigation<NavigationProps>();
-  console.log(123)
+  const {params} =
+    useRoute<RouteProp<RootStackParamsList, SCREENS.SINGLE_USER>>();
+  const {userInfo} = params;
+  console.log(Object.values({...userInfo, id: null}));
   return (
-    <View style={{
-      flex: 1,
-      paddingHorizontal: 26,
-      backgroundColor: '#f6f5f3',
-    }}>
+    <View style={styles.container}>
       <SafeAreaView />
-      <Header />
+      <View>
+        {Object.values({...userInfo, id: null}).map((value, index) => {
+          if (
+            (typeof value === 'string' || typeof value === 'number') &&
+            !Object.keys(userInfo)[index].includes('name')
+          ) {
+            return (
+              <View style={styles.wrapper}>
+                <Text style={styles.text}>{`${
+                  Object.keys(userInfo)[index]
+                }:  ${value}`}</Text>
+              </View>
+            );
+          }
+
+          if (typeof value === 'object' && value !== null) {
+            return (
+              <View style={styles.wrapper}>
+                <Text style={styles.text}>{`${Object.keys(userInfo)[index]}: ${
+                  value?.['__typename']
+                }-${value?.name}`}</Text>
+              </View>
+            );
+          }
+        })}
+      </View>
     </View>
   );
 };
