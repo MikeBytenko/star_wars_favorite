@@ -2,11 +2,11 @@ import {
   createStackNavigator,
   StackNavigationOptions,
 } from '@react-navigation/stack';
-import {Linking} from 'react-native';
+import {Linking, Platform} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {HeaderIcon} from '../../../../assets/icons/HeaderIcon';
 import {SCREENS} from '../../../../types/navigation';
-import {mainScreens} from '../screens';
+import mainScreens from '../screens';
 
 const Stack = createStackNavigator();
 const screenOptions: StackNavigationOptions = {headerShown: false};
@@ -25,6 +25,7 @@ const MainScreens = () => (
             ? ({route}: {route: any}) => ({
                 headerShown: true,
                 headerRight() {
+                  const isIos = Platform.OS === 'ios';
                   const URL = 'https://www.incode-group.com/';
 
                   const handlePress = async () => {
@@ -40,12 +41,17 @@ const MainScreens = () => (
                   };
 
                   return (
-                    <TouchableOpacity onPress={handlePress}>
-                      <HeaderIcon />
-                    </TouchableOpacity>
+                    <>
+                      {isIos && (
+                        <TouchableOpacity onPress={handlePress}>
+                          <HeaderIcon />
+                        </TouchableOpacity>
+                      )}
+                    </>
                   );
                 },
                 headerTitle: route?.params?.userInfo?.name,
+                headerTitleAlign: 'center',
                 headerBackTitle: 'Back',
                 headerBackTitleVisible: true,
                 headerLeftContainerStyle: {borderColor: 'red'},

@@ -14,4 +14,4 @@ const mainScreens = [
   },
 ];
 
-export {mainScreens};
+export default mainScreens;
