@@ -40,6 +40,9 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderLeftColor: 'gray',
   },
+  blueColor: {
+    color: 'blue',
+  },
 });
 
 export default styles;

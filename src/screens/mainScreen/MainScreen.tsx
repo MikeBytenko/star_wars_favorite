@@ -3,7 +3,7 @@ import Header from '../../components/Header';
 import ListOfUsers from '../../components/ListOfUsers';
 import Statistic from '../../components/Statistic';
 import LoadingMainScreen from '../../components/LoadingMainScreen';
-import {useGetAllUsers} from '../../hooks/useGetAllUsers copy/useGetAllUsers';
+import {useGetAllUsers} from '../../hooks/useGetAllUsers/useGetAllUsers';
 import {styles} from './styles';
 
 const MainScreen = () => {
